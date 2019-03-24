@@ -149,7 +149,7 @@ def validators_set_size_variety_generator():
 
 
 if __name__ == '__main__':
-    output_dir = sys.argv[1]
+    output_dir = sys.argv[2]
     for generator in [active_exited_validators_generator, validators_set_size_variety_generator]:
         result = generator()
         filename = os.path.join(output_dir, result['filename'])

@@ -167,7 +167,7 @@ if __name__ == '__main__':
     # TODO
     # Proof-of-possession
 
-    with open(sys.argv[1], 'w') as outfile:
+    with open(sys.argv[2] + "test_bls.yml", 'w') as outfile:
         # Dump at top level
         yaml.dump(metadata, outfile, default_flow_style=False)
         # default_flow_style will unravel "ValidatorRecord" and "committee" line,

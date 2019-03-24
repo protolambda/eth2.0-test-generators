@@ -6,6 +6,109 @@ The test files themselves can be found in [ethereum/eth2.0-tests](https://github
 Whenever a release is made, the new tests are automatically built and
 [eth2TestGenBot](https://github.com/eth2TestGenBot) commits the changes to the test repository.
 
+## How to run generators
+
+pre-requisites:
+- Python 3 installed
+- PIP 3
+- GNU make
+
+### Cleaning
+
+This removes the existing virtual environments (`.venvs/`), and tests (`tests/`).
+
+```bash
+make clean 
+```
+
+### Running all test generators
+
+This runs all the generators.
+
+```bash
+make all
+```
+
+### Running a single generator
+
+The make file auto-detects generators in the `test_generators/` directory,
+ and provides a tests-gen target for each generator, see example.
+
+```bash
+make ./tests/shuffling/
+```
+
+## Developing a generator
+
+Simply open up the generator (not all at once) of choice in your favorite IDE/editor, and run:
+
+```bash
+# Create a virtual environment (any venv/.venv/.venvs is git-ignored)
+python3 -m venv .venv
+# Activate the venv, this is where dependencies are installed for the generator
+. .venv/bin/activate
+```
+
+Now that you have a virtual environment, write your generator.
+It's recommended to extend the base-generator.
+
+Create a `requirements.txt` in the root of your generator directory:
+```
+eth-utils==1.4.1
+../test_libs/gen_helpers
+```
+
+Install all the necessary requirements (re-run when you add more):
+```bash
+pip3 install -r requirements.txt --user
+```
+
+And write your initial test generator, extending the base generator:
+
+Write a `main.py` file, here's an example:
+
+```python
+from gen_base import gen_runner, gen_suite, gen_typing
+
+from eth_utils import (
+    to_dict, to_tuple
+)
+
+
+@to_dict
+def bar_test_case(v: int):
+    yield "bar_v", v
+    yield "bar_v_plus_1", v + 1
+    yield "bar_list", list(range(v))
+
+
+@to_tuple
+def generate_bar_test_cases():
+    for i in range(10):
+        yield bar_test_case(i)
+
+
+def bar_test_suite() -> gen_typing.TestSuite:
+    return gen_suite.render_suite(
+        title="bar_minimal",
+        summary="Minimal example suite, testing bar.",
+        fork="v0.5.1",
+        config="minimal",
+        test_cases=generate_bar_test_cases())
+
+
+if __name__ == "__main__":
+    gen_runner.run_generator("foo", [bar_test_suite])
+
+```
+
+Recommendations:
+- you can have more than just 1 generator, e.g. ` gen_runner.run_generator("foo", [bar_test_suite, abc_test_suite, example_test_suite])`
+- you can concatenate lists of test cases, if you don't want to split it up in suites.
+- you can split your suite generators into different python files/packages, good for code organization.
+- use config "minimal" for performance. But also implement a suite with the default config where necessary
+- the test-generator accepts `--output` and `--force` (overwrite output)
+
 ## How to add a new test generator
 
 In order to add a new test generator that builds `New Tests`:
