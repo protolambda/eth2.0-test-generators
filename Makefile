@@ -20,7 +20,7 @@ clean:
 define build_test_type
 	$(info running generator $(1))
 	# Create the output
-    mkdir -p $(TEST_DIR)$(1)
+	mkdir -p $(TEST_DIR)$(1)
 
 	# Create a virtual environment
 	python3 -m venv $(VENV_DIR)$(1)
