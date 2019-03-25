@@ -1,7 +1,5 @@
-from typing import Tuple, Callable, Dict, Any
-
-TestSuite = Dict[str, Any]
-TestSuiteCreator = Callable[[], TestSuite]
+from typing import Callable, Dict, Any
 
 TestCase = Dict[str, Any]
-TestSuiteTestCases = Tuple[TestCase]
+TestSuite = Dict[str, Any]
+TestSuiteCreator = Callable[[], TestSuite]

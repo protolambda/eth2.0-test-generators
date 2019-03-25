@@ -37,7 +37,7 @@ def run_generator(generator_name, suite_creators: List[TestSuiteCreator]):
     """
 
     parser = argparse.ArgumentParser(
-        prog="gen-"+generator_name,
+        prog="gen-" + generator_name,
         description=f"Generate YAML test suite files for {generator_name}",
     )
     parser.add_argument(
