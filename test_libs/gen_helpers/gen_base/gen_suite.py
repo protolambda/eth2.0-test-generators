@@ -14,4 +14,4 @@ def render_suite(*, title: str, summary: str, fork: str, config: str, test_cases
         yield "summary", summary
     yield "fork", fork
     yield "config", config
-    yield "test_cases", test_cases
+    yield "test_cases", tuple(test_cases)
